@@ -1,33 +1,64 @@
 import inspect
 import string
 from collections import OrderedDict
+from parse_type import cfparse
 
 from typing import *
-
 from behave import matchers, model as behave_model
+
 from goat import model
 from goat.types import TYPE_TO_PARSE_TYPE_MAP
 
 
 class GoatFormatter(string.Formatter):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.unused_args = []
+
+    def check_unused_args(self, used_args, args: tuple, kwargs: OrderedDict):
+        kwarg_key_list = list(kwargs.keys())
+
+        for used_arg in used_args:
+            if isinstance(used_arg, int):
+                key = kwarg_key_list[used_arg]
+            else:
+                key = used_arg
+            kwargs.pop(key)
+
+        self.unused_args = list(kwargs.keys())
 
 
 class GoatMatcher(matchers.CFParseMatcher):
     def __init__(self, func, pattern, step_type=None):
-        func, pattern = self.convert(func, pattern)
-        super().__init__(func, pattern, step_type)
+        matchers.Matcher.__init__(self, func, pattern, step_type)
+        self.context_params = []
+        self.signature = inspect.signature(func)
+
+        pattern = self.convert(func, pattern)
+        self.parser = cfparse.Parser(pattern, self.custom_types)
 
     def match(self, step) -> behave_model.Match:
         result = self.check_match(step)
         if result is None:
             return None
-        return model.Match(self.func, result)
+        return model.Match(self.func, self.signature, result)
 
-    def check_match(self, step) -> List[behave_model.Argument]:
-        """Also add the implicit parameters from the context"""
-        # TODO implement context handling
-        return super().check_match(step)
+    def check_match(self, step) -> List[model.Argument]:
+        """Like matchers.CFParseMatcher.check_match but
+        also add the implicit parameters from the context
+        """
+        args = []
+        match = super().check_match(step)
+        if match is None:
+            return None
+
+        for arg in match or []:
+            args.append(model.Argument.from_argument(arg))
+
+        for arg in self.context_params:
+            args.append(model.Argument(0, 0, "", None, name=arg, implicit=True))
+
+        return args or None
 
     def convert_type_to_parse_type(self, parameter):
         annotation = parameter.annotation
@@ -36,18 +67,18 @@ class GoatMatcher(matchers.CFParseMatcher):
         annotation = TYPE_TO_PARSE_TYPE_MAP.get(annotation, annotation)
         return annotation
 
-    def convert(self, func: Callable, pattern: str) -> Tuple[Callable, str]:
+    def convert(self, func: Callable, pattern: str) -> str:
         """Convert the goat step string to CFParse String"""
         # TODO check if the return of the function is really needed
-        signature = inspect.signature(func)
         parameters = OrderedDict()
-        for parameter in signature.parameters.values():
+        for parameter in self.signature.parameters.values():
             annotation = self.convert_type_to_parse_type(parameter)
             parameters[parameter.name] = "{%s:%s}" % (parameter.name, annotation)
 
-        try:
-            # handle indexed parameters like {} and {0}
-            return func, GoatFormatter().format(pattern, *parameters.values())
-        except KeyError:
-            # handle name parameters like {name}
-            return func, GoatFormatter().format(pattern, **parameters)
+        formatter = GoatFormatter()
+
+        # We have to use vformat here to ensure that kwargs will be OrderedDict
+        converted_pattern = formatter.vformat(pattern, list(parameters.values()), parameters)
+
+        self.context_params = formatter.unused_args
+        return converted_pattern
