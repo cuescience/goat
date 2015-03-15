@@ -28,7 +28,7 @@ class GoatMatcher(matchers.CFParseMatcher):
         # TODO implement context handling
         return super().check_match(step)
 
-    def convert(self, func: Function, pattern: str) -> Tuple[Function, str]:
+    def convert(self, func: Callable, pattern: str) -> Tuple[Callable, str]:
         """Convert the goat step string to CFParse String"""
         # TODO check if the return of the function is really needed
         signature = inspect.signature(func)
