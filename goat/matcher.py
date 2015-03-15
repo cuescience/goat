@@ -11,8 +11,7 @@ from goat.types import TYPE_TO_PARSE_TYPE_MAP
 
 
 class GoatFormatter(string.Formatter):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self):
         self.unused_args = []
 
     def check_unused_args(self, used_args, args: tuple, kwargs: OrderedDict):
