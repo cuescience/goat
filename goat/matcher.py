@@ -6,6 +6,7 @@ from typing import *
 
 from behave import matchers, model as behave_model
 from goat import model
+from goat.types import TYPE_TO_PARSE_TYPE_MAP
 
 
 class GoatFormatter(string.Formatter):
@@ -28,15 +29,20 @@ class GoatMatcher(matchers.CFParseMatcher):
         # TODO implement context handling
         return super().check_match(step)
 
+    def convert_type_to_parse_type(self, parameter):
+        annotation = parameter.annotation
+        if not isinstance(annotation, str):
+            annotation = annotation.__name__
+        annotation = TYPE_TO_PARSE_TYPE_MAP.get(annotation, annotation)
+        return annotation
+
     def convert(self, func: Callable, pattern: str) -> Tuple[Callable, str]:
         """Convert the goat step string to CFParse String"""
         # TODO check if the return of the function is really needed
         signature = inspect.signature(func)
         parameters = OrderedDict()
         for parameter in signature.parameters.values():
-            annotation = parameter.annotation
-            if not isinstance(annotation, str):
-                annotation = annotation.__name__
+            annotation = self.convert_type_to_parse_type(parameter)
             parameters[parameter.name] = "{%s:%s}" % (parameter.name, annotation)
 
         try:
