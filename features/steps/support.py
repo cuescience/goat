@@ -38,5 +38,5 @@ def convert_pattern(context):
             self.signature = inspect.signature(func)
 
     matcher = GoatMatcherMock(context.function, context.pattern)
-    context.result = matcher.convert(context.function, context.pattern)
+    context.result = matcher.convert(context.pattern)
     context.context_params = matcher.context_params

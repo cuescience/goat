@@ -1,10 +1,10 @@
 import inspect
 import string
 from collections import OrderedDict
-from parse_type import cfparse
 
 from typing import *
 from behave import matchers, model as behave_model
+from parse_type import cfparse
 
 from goat import model
 from goat.types import TYPE_TO_PARSE_TYPE_MAP
@@ -34,7 +34,7 @@ class GoatMatcher(matchers.CFParseMatcher):
         self.context_params = []
         self.signature = inspect.signature(func)
 
-        pattern = self.convert(func, pattern)
+        pattern = self.convert(pattern)
         self.parser = cfparse.Parser(pattern, self.custom_types)
 
     def match(self, step) -> behave_model.Match:
@@ -67,9 +67,8 @@ class GoatMatcher(matchers.CFParseMatcher):
         annotation = TYPE_TO_PARSE_TYPE_MAP.get(annotation, annotation)
         return annotation
 
-    def convert(self, func: Callable, pattern: str) -> str:
+    def convert(self, pattern: str) -> str:
         """Convert the goat step string to CFParse String"""
-        # TODO check if the return of the function is really needed
         parameters = OrderedDict()
         for parameter in self.signature.parameters.values():
             annotation = self.convert_type_to_parse_type(parameter)
