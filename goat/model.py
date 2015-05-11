@@ -1,4 +1,6 @@
 import inspect
+from behave.model import Table, Text
+from behave.runner import Context
 from typing import *
 from behave import model
 
@@ -50,10 +52,18 @@ class Match(model.Match):
         for arg in self.implicit_arguments:
             if arg.name is not None:
                 annotation = self.signature.parameters[arg.name].annotation
+                annotation_name = annotation
                 if not isinstance(annotation, str):
-                    annotation = annotation.__name__
+                    annotation_name = annotation.__name__
 
-                value = context.__getattr__(CONTEXT_NAMESPACE.format(annotation))
+                if annotation is Table:
+                    value = context.table
+                elif annotation is Context:
+                    value = context
+                elif annotation is Text:
+                    value = context.text
+                else:
+                    value = context.__getattr__(CONTEXT_NAMESPACE.format(annotation_name))
 
                 kwargs[arg.name] = value
             else:
@@ -69,6 +79,3 @@ class Match(model.Match):
                 return_annotation = return_annotation.__name__
 
             context.__setattr__(CONTEXT_NAMESPACE.format(return_annotation), return_value)
-
-    def get_implicit_parameters_from_context(self) -> list:
-        pass

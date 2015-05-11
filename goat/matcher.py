@@ -51,13 +51,13 @@ class GoatMatcher(matchers.CFParseMatcher):
         if match is None:
             return None
 
-        for arg in match or []:
+        for arg in match:
             args.append(model.Argument.from_argument(arg))
 
         for arg in self.context_params:
             args.append(model.Argument(0, 0, "", None, name=arg, implicit=True))
 
-        return args or None
+        return args
 
     def convert_type_to_parse_type(self, parameter):
         annotation = parameter.annotation
