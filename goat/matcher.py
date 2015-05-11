@@ -1,5 +1,5 @@
 import inspect
-import string
+from goat import string
 from collections import OrderedDict
 
 from typing import *
@@ -76,7 +76,9 @@ class GoatMatcher(matchers.CFParseMatcher):
         formatter = GoatFormatter()
 
         # We have to use vformat here to ensure that kwargs will be OrderedDict
-        converted_pattern = formatter.vformat(pattern, list(parameters.values()), parameters)
+        values = parameters.values()
+        parameter_list = list(values)
+        converted_pattern = formatter.vformat(pattern, parameter_list, parameters)
 
         self.context_params = formatter.unused_args
         return converted_pattern
