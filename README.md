@@ -1,4 +1,4 @@
-<div style="text-align:center"><img src ="https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png" alt="Goat" /></div>
+![Goat](https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png)
 
 Goat implements a matcher for [behave](https://github.com/behave/behave) wich uses python3 function annotations for specifiying parameter types in step definitions.
 
@@ -53,8 +53,8 @@ def my_name_and_age(name: str, age: int) -> Person:
 The indexes of the placeholders has to correspond to the order of the function arguments.
 
 ### Types
-Following standard types are available by now: int, float, str.
-But you can easily extend it (e.g. goat.types.Word):
+Following standard types are available by now: int, float, str. Behave types like Table, Context, Text are also supported.
+If this is not enough, you can easily extend it (e.g. goat.types.Word):
 ```python
 import parse
 from behave import register_type
@@ -67,4 +67,7 @@ def parse_word(value: str) -> Word:
 register_type(Word=parse_word)
 ```
 
+**Feel free to submit a Pull Request if you think the type extension is useful for others!**
+
 ### Implicit parameters
+Like mentioned before, there is no need 
