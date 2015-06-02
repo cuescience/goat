@@ -20,6 +20,8 @@ If you are not familiar with behave, you can get started by reading the [tutoria
 
 To start using goat you have to register the GoatMatcher:
 ```python
+from behave import *
+from behave import matchers
 from goat.matcher import GoatMatcher
 
 matchers.matcher_mapping.update({"goat": GoatMatcher})
