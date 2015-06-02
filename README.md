@@ -6,7 +6,7 @@ Goat implements a matcher for [behave](https://github.com/behave/behave) wich us
 ```python
 @given("my name is {name} and I'm {age} years old")
 def my_name_and_age(name: str, age: int) -> Person:
-    ...
+    pass
 ```
 
 ## Installation
