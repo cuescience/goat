@@ -66,3 +66,5 @@ def parse_word(value: str) -> Word:
 
 register_type(Word=parse_word)
 ```
+
+### Implicit parameters
