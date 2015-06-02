@@ -50,7 +50,7 @@ def my_name_and_age(name: str, age: int) -> Person:
 @given("my name is {0} and I'm {1} years old")
 def my_name_and_age(name: str, age: int) -> Person:
 ```
-The index of the placeholder has to correspond to the order of the function arguments.
+The indexes of the placeholders has to correspond to the order of the function arguments.
 
 ### Types
 Following standard types are available by now: int, float, str.
