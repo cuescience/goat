@@ -1,7 +1,7 @@
 ![Goat](https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png)
 
 
-Goat implements a matcher for [behave](https://github.com/behave/behave) wich uses python3 function annotations for specifiying parameter types in step definitions.
+Goat implements a matcher for [behave](https://github.com/behave/behave) which uses python3 function annotations for specifiying parameter types in step definitions.
 
 ```python
 @given("my name is {name} and I'm {age} years old")
@@ -86,7 +86,7 @@ def assert_person_is_n_years_old(expected_age: int, person: Person):
     assert person.age == expected_age
 ```
 
-If you make use of the sentences in a feature file the returned Person of the ´my_name_and_age´ step will be passed into the ´assert_person_is_n_years_old´ step.
+If you make use of the sentences in a feature file the returned Person of the `my_name_and_age` step will be passed into the `assert_person_is_n_years_old` step.
 ```gherkin
 Feature: Test
 Scenario: Implicit parameters
