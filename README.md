@@ -73,7 +73,7 @@ register_type(Word=parse_word)
 **Feel free to submit a Pull Request if you think the type extension is useful for others!**
 
 ### Implicit parameters
-As mentioned before, there is no need to add `context` as first argument in your step definitions. But how you pass state from one step to another then? With the help of **Implicit parameters** your step definitions will become much cleaner.
+As mentioned before, there is no need to add `context` as first argument in your step definitions. But how you pass state from one step to another then? With the help of **implicit parameters** your step definitions will become much cleaner.
 
 If you want to add some value to the context just return it in your step definition (make sure to also add a return function annotation):
 ```python
