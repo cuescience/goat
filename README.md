@@ -73,7 +73,7 @@ register_type(Word=parse_word)
 **Feel free to submit a Pull Request if you think the type extension is useful for others!**
 
 ### Implicit parameters
-As mentioned before, there is no need to add *context* as first argument in your step definitions. But how you then pass state from one step to another? With the help of **Implicit parameters** your step definitions will become much cleaner.
+As mentioned before, there is no need to add `context` as first argument in your step definitions. But how you then pass state from one step to another? With the help of **Implicit parameters** your step definitions will become much cleaner.
 
 If you want to add some value to the context just return it in your step definition (make sure to also add a return function annotation):
 ```python
@@ -86,7 +86,7 @@ def assert_person_is_n_years_old(expected_age: int, person: Person):
     assert person.age == expected_age
 ```
 
-If you make use of the sentences in a feature file the returned Person of the *my_name_and_age* step will be passed into the *assert_person_is_n_years_old* step.
+If you make use of the sentences in a feature file the returned Person of the ´my_name_and_age´ step will be passed into the ´assert_person_is_n_years_old´ step.
 ```gherkin
 Feature: Test
 Scenario: Implicit parameters
@@ -95,7 +95,7 @@ Given my name is Ilja and I'm 24 years old
 Then assert the given person is 24 years old
 ```
 
-You can also use behaves Table and Text like this:
+You can also use behaves `Table` and `Text` like this:
 ```python
 from behave.model import Table, Text
 
