@@ -17,7 +17,7 @@ pip install goat
 If you are not familiar with behave, you can get started by reading the [tutorial](http://pythonhosted.org/behave/tutorial.html).
 
 
-To start using goat you have to register the GoatMatcher:
+To start using goat you have to register the GoatMatcher in your `steps.py` file:
 ```python
 from behave import *
 from behave import matchers
