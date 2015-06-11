@@ -1,7 +1,6 @@
 import inspect
 from behave.model import Table, Text
 from behave.runner import Context
-from typing import *
 from behave import model
 
 CONTEXT_NAMESPACE = "_goat_{}"
@@ -25,7 +24,7 @@ class Argument(model.Argument):
 
 
 class Match(model.Match):
-    def __init__(self, func, signature, arguments: List[Argument]=None):
+    def __init__(self, func, signature, arguments: list=None):
         self.signature = signature
         super().__init__(func, arguments)
 

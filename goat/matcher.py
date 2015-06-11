@@ -2,7 +2,6 @@ import inspect
 from goat import string
 from collections import OrderedDict
 
-from typing import *
 from behave import matchers, model as behave_model
 from parse_type import cfparse
 
@@ -42,7 +41,7 @@ class GoatMatcher(matchers.CFParseMatcher):
             return None
         return model.Match(self.func, self.signature, result)
 
-    def check_match(self, step) -> List[model.Argument]:
+    def check_match(self, step) -> list:
         """Like matchers.CFParseMatcher.check_match but
         also add the implicit parameters from the context
         """

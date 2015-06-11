@@ -8,23 +8,19 @@ except ImportError:
     from distutils.core import setup
 
 
-readme = open('README.rst').read()
 
 requirements = [
     "behave",
-    "typing"
 ]
 
 test_requirements = [
     "behave",
-    "typing"
 ]
 
 setup(
     name='goat',
-    version='0.1',
+    version='0.3',
     description='Goat implements a behave matcher which uses python3 function annotations for step definitiions',
-    long_description=readme,
     author='Ilja Bauer',
     author_email='i.bauer@cuescience.de',
     url='https://github.com/cuescience/goat',
