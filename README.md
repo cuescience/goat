@@ -98,11 +98,11 @@ You can also use behaves `Table` and `Text` like this:
 ```python
 from behave.model import Table, Text
 
-@given("folowing table:")
+@given("following table:")
 def given_following_table(table: Table):
     pass
     
-@given("folowing text:")
+@given("following text:")
 def given_following_text(text: Text):
     pass
 ```
