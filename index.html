@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Goat by cuescience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Goat</h1>
+      <h2 class="project-tagline">Goat implements a behave matcher which uses python3 function annotations for step definitiions</h2>
+      <a href="https://github.com/cuescience/goat" class="btn">View on GitHub</a>
+      <a href="https://github.com/cuescience/goat/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cuescience/goat/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p align="center"><img src="https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png" width="350" alt="Goat"></p>
+
+<p>Goat implements a matcher for <a href="https://github.com/behave/behave">behave</a> which uses python3 function annotations for specifiying parameter types in step definitions.</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>my name is <span class="pl-c1">{name}</span> and I'm <span class="pl-c1">{age}</span> years old<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">my_name_and_age</span>(name: <span class="pl-smi">str</span>, age: <span class="pl-smi">int</span>) -&gt; Person:
+    <span class="pl-smi">pass</span></pre></div>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<pre><code>pip install goat
+</code></pre>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<p>If you are not familiar with behave, you can get started by reading the <a href="http://pythonhosted.org/behave/tutorial.html">tutorial</a>.</p>
+
+<p>To start using goat you have to register the GoatMatcher in your <code>steps.py</code> file:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> behave <span class="pl-k">import</span> <span class="pl-k">*</span>
+<span class="pl-k">from</span> behave <span class="pl-k">import</span> matchers
+<span class="pl-k">from</span> goat.matcher <span class="pl-k">import</span> GoatMatcher
+
+matchers.matcher_mapping.update({<span class="pl-s"><span class="pl-pds">"</span>goat<span class="pl-pds">"</span></span>: GoatMatcher})
+use_step_matcher(<span class="pl-s"><span class="pl-pds">"</span>goat<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>Now you can specify you step definitions like this:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>my name is <span class="pl-c1">{name}</span> and I'm <span class="pl-c1">{age}</span> years old<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">my_name_and_age</span>(name: <span class="pl-smi">str</span>, age: <span class="pl-smi">int</span>) -&gt; Person:
+    ...</pre></div>
+
+<p><strong>Be aware that unlike other behave matchers there is no need to pass the context variable as first argument.</strong></p>
+
+<p>The arguments will be of the right type:</p>
+
+<pre><code>&gt;&gt;&gt; type(age)
+&lt;type 'int'&gt;
+&gt;&gt;&gt; type(name)
+&lt;type 'str'&gt;
+</code></pre>
+
+<p>Instead of using named placeholder you can also use unnamed and indexed ones:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>my name is <span class="pl-c1">{}</span> and I'm <span class="pl-c1">{}</span> years old<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">my_name_and_age</span>(name: <span class="pl-smi">str</span>, age: <span class="pl-smi">int</span>) -&gt; Person:</pre></div>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>my name is <span class="pl-c1">{0}</span> and I'm <span class="pl-c1">{1}</span> years old<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">my_name_and_age</span>(name: <span class="pl-smi">str</span>, age: <span class="pl-smi">int</span>) -&gt; Person:</pre></div>
+
+<p>The indexes of the placeholders has to correspond to the order of the function arguments.</p>
+
+<h3>
+<a id="types" class="anchor" href="#types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Types</h3>
+
+<p>Following standard types are available by now: int, float, str. Behave types like Table, Context, Text are also supported.
+If this is not enough, you can easily extend it (e.g. goat.types.Word):</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> parse
+<span class="pl-k">from</span> behave <span class="pl-k">import</span> register_type
+
+<span class="pl-en">@</span><span class="pl-en">parse.with_pattern</span>(<span class="pl-s"><span class="pl-k">r</span><span class="pl-pds">"</span><span class="pl-c1">\w</span><span class="pl-k">+</span><span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">parse_word</span>(value: <span class="pl-smi">str</span>) -&gt; Word:
+    return Word(<span class="pl-smi">value</span>)
+
+
+register_type(<span class="pl-smi">Word</span><span class="pl-k">=</span>parse_word)</pre></div>
+
+<p><strong>Feel free to submit a Pull Request if you think the type extension is useful for others!</strong></p>
+
+<h3>
+<a id="implicit-parameters" class="anchor" href="#implicit-parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implicit parameters</h3>
+
+<p>As mentioned before, there is no need to add <code>context</code> as first argument in your step definitions. But how you pass state from one step to another then? With the help of <strong>implicit parameters</strong> your step definitions will become much cleaner.</p>
+
+<p>If you want to add some value to the context just return it in your step definition (make sure to also add a return function annotation):</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>my name is <span class="pl-c1">{name}</span> and I'm <span class="pl-c1">{age}</span> years old<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">my_name_and_age</span>(name: <span class="pl-smi">str</span>, age: <span class="pl-smi">int</span>) -&gt; Person:
+    return Person(<span class="pl-smi">name</span>, <span class="pl-smi">age</span>)
+
+@then("assert the given person is {} years old")
+def assert_person_is_n_years_old(expected_age: <span class="pl-smi">int</span>, person: <span class="pl-smi">Person</span>):
+    <span class="pl-k">assert</span> person.age <span class="pl-k">==</span> expected_age</pre></div>
+
+<p>If you make use of the sentences in a feature file the returned Person of the <code>my_name_and_age</code> step will be passed into the <code>assert_person_is_n_years_old</code> step.</p>
+
+<div class="highlight highlight-text-gherkin-feature"><pre><span class="pl-k">Feature</span>:<span class="pl-s"> Test</span>
+<span class="pl-k">Scenario</span>:<span class="pl-s"> Implicit parameters</span>
+
+<span class="pl-k">Given </span>my name is Ilja and I'm 24 years old
+<span class="pl-k">Then </span>assert the given person is 24 years old</pre></div>
+
+<p>You can also use behaves <code>Table</code> and <code>Text</code> like this:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> behave.model <span class="pl-k">import</span> Table, Text
+
+<span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>following table:<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">given_following_table</span>(table: <span class="pl-smi">Table</span>):
+    <span class="pl-k">pass</span>
+
+<span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>following text:<span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">given_following_text</span>(text: <span class="pl-smi">Text</span>):
+    <span class="pl-k">pass</span></pre></div>
+
+<p>If you really need the whole context or you want to migrate your old behave test suite, you can also pass the context explicitly:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> behave.runner <span class="pl-k">import</span> Context
+
+<span class="pl-en">@</span><span class="pl-en">given</span>(<span class="pl-s"><span class="pl-pds">"</span>Assert context contains a person with age <span class="pl-c1">{}</span><span class="pl-pds">"</span></span>)
+<span class="pl-k">def</span> <span class="pl-en">assert_context_contains</span>(age: <span class="pl-smi">int</span>, context: <span class="pl-smi">Context</span>):
+    <span class="pl-k">pass</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cuescience/goat">Goat</a> is maintained by <a href="https://github.com/cuescience">cuescience</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
