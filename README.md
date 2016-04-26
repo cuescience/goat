@@ -1,6 +1,6 @@
 <p align="center"><img src="https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png" width="350" alt="Goat"></p>
 
-Goat implements a matcher for [behave](https://github.com/behave/behave) which uses python3 function annotations for specifiying parameter types in step definitions.
+Goat implements a matcher for [behave](https://github.com/behave/behave) which uses python3 function annotations ([PEP-3107](https://www.python.org/dev/peps/pep-3107/)) for specifiying parameter types in step definitions.
 
 ```python
 @given("my name is {name} and I'm {age} years old")
@@ -55,8 +55,8 @@ def my_name_and_age(name: str, age: int) -> Person:
 The indexes of the placeholders has to correspond to the order of the function arguments.
 
 ### Types
-Following standard types are available by now: int, float, str. Behave types like Table, Context, Text are also supported.
-If this is not enough, you can easily extend it (e.g. goat.types.Word):
+Following standard types are available by now: `int`, `float` and `str`. Behave types like `Table`, `Context` and `Text` are also supported.
+If this is not enough, you can easily extend it (e.g. `goat.types.Word`):
 ```python
 import parse
 from behave import register_type
