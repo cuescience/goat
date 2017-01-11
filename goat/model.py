@@ -7,8 +7,8 @@ CONTEXT_NAMESPACE = "_goat_{}"
 
 
 class Argument(model.Argument):
-    def __init__(self, *args, **kwargs):
-        self.implicit = kwargs.pop("implicit", False)
+    def __init__(self, *args, implicit=False, **kwargs):
+        self.implicit = implicit
         super().__init__(*args, **kwargs)
 
     @staticmethod
@@ -24,7 +24,7 @@ class Argument(model.Argument):
 
 
 class Match(model.Match):
-    def __init__(self, func, signature, arguments: list=None):
+    def __init__(self, func, signature, arguments: list = None):
         self.signature = signature
         super().__init__(func, arguments)
 
@@ -61,8 +61,20 @@ class Match(model.Match):
                     value = context
                 elif annotation is Text:
                     value = context.text
-                else:
+                elif annotation is inspect._empty:
+                    raise RuntimeError(
+                        "Parameter '{}' of step implementation '{}{}' does not have a type! Please specify it in the correct steps file.".format(
+                            arg.name,
+                            self.func.__qualname__,
+                            self.signature,
+
+                        )
+                    )
+                elif CONTEXT_NAMESPACE.format(annotation_name) in context:
                     value = context.__getattr__(CONTEXT_NAMESPACE.format(annotation_name))
+                else:
+                    raise RuntimeError(
+                        "'{}' was not found in context. Is a context parameter missing?".format(arg.name))
 
                 kwargs[arg.name] = value
             else:

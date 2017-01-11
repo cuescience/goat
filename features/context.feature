@@ -35,3 +35,10 @@ Feature: Context parameters
     * Create function: the_result_is(result:int, variance:int, expected_result: int)
     * Convert pattern to cfparse
     * Assert context parameters are: result
+
+  Scenario: Error that raises when a parameter is not in the context but is expected
+    * Create function: pattern_with_expected_but_missing_context_parameter(context_parameter: str)
+    * Expect RuntimeError with message 'context_parameter' was not found in context. Is a context parameter missing?
+    * Run function with arguments
+      | Argument          | Value | Implicit |
+      | context_parameter |       | True     |
