@@ -1,5 +1,7 @@
 <p align="center"><img src="https://cloud.githubusercontent.com/assets/831374/7931713/d42b7f4a-090a-11e5-8b74-c96391a9503b.png" width="350" alt="Goat"></p>
 
+[![Build Status](https://travis-ci.org/cuescience/goat.svg?branch=master)](https://travis-ci.org/cuescience/goat)
+
 Goat implements a matcher for [behave](https://github.com/behave/behave) which uses python3 function annotations ([PEP-3107](https://www.python.org/dev/peps/pep-3107/)) for specifiying parameter types in step definitions.
 
 ```python
