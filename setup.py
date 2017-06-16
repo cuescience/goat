@@ -19,7 +19,7 @@ test_requirements = [
 
 setup(
     name='goat',
-    version='0.3.1',
+    version='0.3.2',
     description='Goat implements a behave matcher which uses python3 function annotations for step definitiions',
     author='Ilja Bauer',
     author_email='i.bauer@cuescience.de',
