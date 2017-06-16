@@ -2,7 +2,15 @@ import inspect
 from goat import string
 from collections import OrderedDict
 
-from behave import matchers, model as behave_model
+from behave import matchers
+
+try:
+    from behave.model import Argument as Argument_
+    from behave.model import Match as Match_
+except ImportError:
+    from behave.model_core import Argument as Argument_
+    from behave.matchers import Match as Match_
+
 from parse_type import cfparse
 
 from goat import model
@@ -35,7 +43,7 @@ class GoatMatcher(matchers.CFParseMatcher):
         pattern = self.convert(pattern)
         self.parser = cfparse.Parser(pattern, self.custom_types)
 
-    def match(self, step) -> behave_model.Match:
+    def match(self, step) -> Match_:
         result = self.check_match(step)
         if result is None:
             return None

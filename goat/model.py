@@ -1,18 +1,25 @@
 import inspect
 from behave.model import Table, Text
+
+try:
+    from behave.model import Argument as Argument_
+    from behave.model import Match as Match_
+except ImportError:
+    from behave.model_core import Argument as Argument_
+    from behave.matchers import Match as Match_
+
 from behave.runner import Context
-from behave import model
 
 CONTEXT_NAMESPACE = "_goat_{}"
 
 
-class Argument(model.Argument):
+class Argument(Argument_):
     def __init__(self, *args, implicit=False, **kwargs):
         self.implicit = implicit
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def from_argument(argument: model.Argument, implicit=False):
+    def from_argument(argument: Argument_, implicit=False):
         return Argument(
             argument.start,
             argument.end,
@@ -23,7 +30,7 @@ class Argument(model.Argument):
         )
 
 
-class Match(model.Match):
+class Match(Match_):
     def __init__(self, func, signature, arguments: list = None):
         self.signature = signature
         super().__init__(func, arguments)
